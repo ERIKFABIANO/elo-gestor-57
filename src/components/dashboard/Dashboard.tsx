@@ -4,14 +4,14 @@ import { QuickActions } from "./QuickActions";
 import { VerseWidget } from "./VerseWidget";
 import { useEffect, useState } from "react";
 import { getDailyQuote } from "@/utils/motivationalQuotes";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DashboardProps {
   onNavigateToSection?: (section: string) => void;
 }
 
 export const Dashboard = ({ onNavigateToSection }: DashboardProps) => {
-  const { t } = useLanguage();
+  const { profile } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString('pt-BR', {
     weekday: 'long',
     year: 'numeric',
@@ -66,7 +66,7 @@ export const Dashboard = ({ onNavigateToSection }: DashboardProps) => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground mb-1">
-              {t('dashboard.welcome')} 👋
+              Bem-vindo, {profile?.display_name || 'Usuário'} 👋
             </h1>
             <p className="text-muted-foreground italic">"{dailyQuote}"</p>
           </div>
@@ -83,25 +83,25 @@ export const Dashboard = ({ onNavigateToSection }: DashboardProps) => {
       {/* Métricas Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
-          title={t('dashboard.completedTasks')}
+          title="Tarefas Concluídas"
           value={taskStats.completed}
           icon={CheckSquare}
           gradient="success"
         />
         <MetricCard
-          title={t('dashboard.pendingTasks')}
+          title="Tarefas Pendentes"
           value={taskStats.pending}
           icon={Clock}
           gradient="orange"
         />
         <MetricCard
-          title={t('dashboard.dailyTasks')}
+          title="Tarefas do Dia"
           value={taskStats.dailyTasks}
           icon={Target}
           gradient="purple"
         />
         <MetricCard
-          title={t('dashboard.totalScore')}
+          title="Pontuação Total"
           value={0}
           icon={TrendingUp}
           gradient="primary"
@@ -124,16 +124,16 @@ export const Dashboard = ({ onNavigateToSection }: DashboardProps) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Progresso Semanal - Valores zerados inicialmente */}
         <div className="lg:col-span-3 bg-card-glass/80 backdrop-blur-sm border border-card-border rounded-lg p-6 shadow-card">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.weeklyProgress')}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">Seu Progresso Semanal</h3>
           <div className="space-y-3">
             {[
-              t('dashboard.monday'), 
-              t('dashboard.tuesday'), 
-              t('dashboard.wednesday'), 
-              t('dashboard.thursday'), 
-              t('dashboard.friday'), 
-              t('dashboard.saturday'), 
-              t('dashboard.sunday')
+              'Segunda', 
+              'Terça', 
+              'Quarta', 
+              'Quinta', 
+              'Sexta', 
+              'Sábado', 
+              'Domingo'
             ].map((day, index) => {
               const isToday = index === new Date().getDay() - 1;
               

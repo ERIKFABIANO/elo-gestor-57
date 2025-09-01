@@ -3,19 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, ClipboardList, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserManagement } from "./UserManagement";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AdminStats {
   totalUsers: number;
   totalTasks: number;
+  completedTasks: number;
   dailyAccess: number;
 }
 
 export const AdminDashboard = () => {
-  const { t } = useLanguage();
   const [stats, setStats] = useState<AdminStats>({
     totalUsers: 0,
     totalTasks: 0,
+    completedTasks: 0,
     dailyAccess: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,9 @@ export const AdminDashboard = () => {
         .from('tasks')
         .select('*', { count: 'exact', head: true });
 
+      // Get completed tasks - for now using 0 as placeholder
+      const completedTasksCount = 0;
+
       // Get daily access for today
       const today = new Date().toISOString().split('T')[0];
       const { data: dailyAccessData } = await supabase
@@ -50,6 +53,7 @@ export const AdminDashboard = () => {
       setStats({
         totalUsers: usersCount || 0,
         totalTasks: tasksCount || 0,
+        completedTasks: completedTasksCount || 0,
         dailyAccess: totalDailyAccess,
       });
     } catch (error) {
@@ -61,29 +65,35 @@ export const AdminDashboard = () => {
 
   const statsCards = [
     {
-      title: t('admin.totalUsers'),
+      title: "Total de Usuários",
       value: stats.totalUsers,
       icon: Users,
       gradient: "bg-gradient-primary",
     },
     {
-      title: t('admin.totalTasks'),
+      title: "Total de Tarefas Criadas",
       value: stats.totalTasks,
       icon: ClipboardList,
       gradient: "bg-gradient-orange",
     },
     {
-      title: t('admin.dailyAccess'),
-      value: stats.dailyAccess,
+      title: "Total de Tarefas Realizadas",
+      value: stats.completedTasks,
       icon: TrendingUp,
       gradient: "bg-gradient-success",
+    },
+    {
+      title: "Acessos Diários",
+      value: stats.dailyAccess,
+      icon: TrendingUp,
+      gradient: "bg-gradient-purple",
     },
   ];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-muted-foreground">{t('admin.loading')}</div>
+        <div className="text-muted-foreground">Carregando...</div>
       </div>
     );
   }
@@ -91,12 +101,12 @@ export const AdminDashboard = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">{t('admin.title')}</h1>
-        <p className="text-muted-foreground">{t('dashboard.overview')}</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Painel Administrativo</h1>
+        <p className="text-muted-foreground">Visão Geral do Sistema</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statsCards.map((stat, index) => {
           const Icon = stat.icon;
           return (

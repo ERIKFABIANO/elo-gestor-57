@@ -39,7 +39,6 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Profile {
   id: string;
@@ -52,7 +51,6 @@ interface Profile {
 }
 
 export const UserManagement = () => {
-  const { t } = useLanguage();
   const { toast } = useToast();
   const [users, setUsers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +81,7 @@ export const UserManagement = () => {
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
-        title: t('common.error'),
+        title: "Erro",
         description: 'Erro ao carregar usuários',
         variant: "destructive",
       });
@@ -145,7 +143,7 @@ export const UserManagement = () => {
       }
 
       toast({
-        title: t('common.success'),
+        title: "Sucesso",
         description: 'Usuário atualizado com sucesso',
       });
 
@@ -154,7 +152,7 @@ export const UserManagement = () => {
     } catch (error) {
       console.error('Error updating user:', error);
       toast({
-        title: t('common.error'),
+        title: "Erro",
         description: 'Erro ao atualizar usuário',
         variant: "destructive",
       });
@@ -171,7 +169,7 @@ export const UserManagement = () => {
       if (error) throw error;
 
       toast({
-        title: t('common.success'),
+        title: "Sucesso",
         description: 'Usuário excluído com sucesso',
       });
 
@@ -180,7 +178,7 @@ export const UserManagement = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
       toast({
-        title: t('common.error'),
+        title: "Erro",
         description: 'Erro ao excluir usuário',
         variant: "destructive",
       });
@@ -195,27 +193,27 @@ export const UserManagement = () => {
     <Card className="border-0 shadow-card">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-foreground">
-          {t('admin.userManagement')}
+          Gerenciamento de Usuários
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="text-muted-foreground">{t('admin.loading')}</div>
+            <div className="text-muted-foreground">Carregando...</div>
           </div>
         ) : users.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            {t('admin.noUsers')}
+            Nenhum usuário encontrado
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t('admin.name')}</TableHead>
-                <TableHead>{t('admin.email')}</TableHead>
-                <TableHead>{t('admin.role')}</TableHead>
-                <TableHead>{t('admin.createdAt')}</TableHead>
-                <TableHead>{t('admin.actions')}</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>E-mail</TableHead>
+                <TableHead>Função</TableHead>
+                <TableHead>Criado em</TableHead>
+                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -265,14 +263,14 @@ export const UserManagement = () => {
         <Dialog open={!!editingUser} onOpenChange={() => setEditingUser(null)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t('admin.editUser')}</DialogTitle>
+              <DialogTitle>Editar Usuário</DialogTitle>
               <DialogDescription>
                 Faça as alterações necessárias no usuário.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="display_name">{t('admin.name')}</Label>
+                <Label htmlFor="display_name">Nome</Label>
                 <Input
                   id="display_name"
                   value={editForm.display_name}
@@ -280,7 +278,7 @@ export const UserManagement = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="email">{t('admin.email')}</Label>
+                <Label htmlFor="email">E-mail</Label>
                 <Input
                   id="email"
                   type="email"
@@ -289,7 +287,7 @@ export const UserManagement = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="avatar_url">{t('admin.profilePhoto')}</Label>
+                <Label htmlFor="avatar_url">Foto do Perfil</Label>
                 <Input
                   id="avatar_url"
                   placeholder="URL da foto"
@@ -298,7 +296,7 @@ export const UserManagement = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="role">{t('admin.role')}</Label>
+                <Label htmlFor="role">Função</Label>
                 <Select value={editForm.role} onValueChange={(value) => setEditForm(prev => ({ ...prev, role: value }))}>
                   <SelectTrigger>
                     <SelectValue />
@@ -310,7 +308,7 @@ export const UserManagement = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="new_password">{t('admin.newPassword')}</Label>
+                <Label htmlFor="new_password">Nova Senha</Label>
                 <Input
                   id="new_password"
                   type="password"
@@ -322,10 +320,10 @@ export const UserManagement = () => {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditingUser(null)}>
-                {t('admin.cancel')}
+                Cancelar
               </Button>
               <Button onClick={handleSaveUser}>
-                {t('admin.save')}
+                Salvar
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -335,18 +333,18 @@ export const UserManagement = () => {
         <AlertDialog open={!!deletingUser} onOpenChange={() => setDeletingUser(null)}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{t('admin.confirmDelete')}</AlertDialogTitle>
+              <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
               <AlertDialogDescription>
-                {t('admin.deleteMessage')}
+                Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>{t('admin.cancel')}</AlertDialogCancel>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDeleteUser}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                {t('admin.delete')}
+                Excluir
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
