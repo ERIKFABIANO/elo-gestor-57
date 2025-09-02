@@ -9,6 +9,11 @@ interface Profile {
   email: string;
   role: 'admin' | 'user';
   avatar_url?: string;
+  phone?: string;
+  address?: string;
+  state?: string;
+  city?: string;
+  zip_code?: string;
 }
 
 interface AuthContextType {
