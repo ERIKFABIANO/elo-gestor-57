@@ -56,20 +56,88 @@ const Auth = () => {
   return (
     <div className="min-h-screen relative overflow-hidden">
 
-      {/* Background with animated gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-purple via-primary to-accent-orange bg-[length:400%_400%] animate-pulse"></div>
+      {/* 3D Background with animated gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 animate-pulse"></div>
       
-      {/* Animated background shapes */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-br from-primary/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-accent-purple/30 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gradient-to-br from-accent-orange/20 to-transparent rounded-full blur-3xl animate-pulse delay-500"></div>
+      {/* 3D Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Dollar Icon */}
+        <div className="absolute top-32 left-24 w-16 h-16 bg-gradient-to-br from-green-400 to-green-500 rounded-2xl shadow-2xl transform rotate-12 animate-bounce delay-100 flex items-center justify-center">
+          <span className="text-white text-2xl font-bold">$</span>
+        </div>
+        
+        {/* Tasks Icon */}
+        <div className="absolute top-64 right-32 w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-500 rounded-3xl shadow-2xl transform -rotate-12 animate-bounce delay-300 flex items-center justify-center">
+          <span className="text-white text-2xl">✓</span>
+        </div>
+        
+        {/* Chart Icon */}
+        <div className="absolute top-48 left-1/2 w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-2xl transform rotate-45 animate-bounce delay-500 flex items-center justify-center">
+          <span className="text-white text-xl">📊</span>
+        </div>
+        
+        {/* Settings Icon */}
+        <div className="absolute bottom-48 left-32 w-18 h-18 bg-gradient-to-br from-pink-400 to-red-500 rounded-full shadow-2xl transform rotate-6 animate-bounce delay-700 flex items-center justify-center p-4">
+          <span className="text-white text-xl">⚙️</span>
+        </div>
+        
+        {/* Diamond Icon */}
+        <div className="absolute top-80 right-64 w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 shadow-2xl transform rotate-45 animate-bounce delay-900" style={{clipPath: 'polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%)'}}>
+        </div>
+        
+        {/* Additional floating elements */}
+        <div className="absolute bottom-32 right-24 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl shadow-2xl transform -rotate-6 animate-bounce delay-1100 flex items-center justify-center">
+          <span className="text-white text-xl">📱</span>
+        </div>
+        
+        {/* Animated particles */}
+        <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-white/30 rounded-full animate-ping delay-200"></div>
+        <div className="absolute top-3/4 left-2/3 w-2 h-2 bg-white/20 rounded-full animate-ping delay-400"></div>
+        <div className="absolute top-1/2 right-1/4 w-4 h-4 bg-white/25 rounded-full animate-ping delay-600"></div>
       </div>
 
       {/* Main content */}
       <div className="relative z-10 flex items-center justify-center min-h-screen p-6">
-        <div className="w-full max-w-6xl flex items-center justify-center">
-          <Card className="w-full max-w-md bg-card-glass/80 backdrop-blur-xl border-card-border/50 shadow-float">
+        <div className="w-full max-w-7xl flex items-center justify-between px-8">
+          
+          {/* Left side - Welcome Section */}
+          <div className="hidden lg:block flex-1 text-white pr-16">
+            <div className="space-y-6">
+              <h1 className="text-5xl font-bold mb-4 animate-fade-in">
+                Sistema Seguro
+              </h1>
+              <p className="text-xl text-white/90 leading-relaxed animate-fade-in delay-200">
+                Gerencie suas finanças, tarefas e vida espiritual com segurança e praticidade
+              </p>
+              
+              {/* Feature icons */}
+              <div className="flex space-x-8 mt-8 animate-fade-in delay-400">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-500 rounded-2xl shadow-lg flex items-center justify-center mb-3 transform hover:scale-110 transition-transform">
+                    <span className="text-white text-2xl font-bold">$</span>
+                  </div>
+                  <p className="text-sm text-white/80">Financeiro</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl shadow-lg flex items-center justify-center mb-3 transform hover:scale-110 transition-transform">
+                    <span className="text-white text-2xl">✓</span>
+                  </div>
+                  <p className="text-sm text-white/80">Tarefas</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-500 rounded-2xl shadow-lg flex items-center justify-center mb-3 transform hover:scale-110 transition-transform">
+                    <span className="text-white text-2xl">✨</span>
+                  </div>
+                  <p className="text-sm text-white/80">Fé</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right side - Login Form */}
+          <Card className="w-full max-w-md bg-white/10 backdrop-blur-2xl border-white/20 shadow-2xl animate-scale-in">
             <div className="p-8">
               {/* Back button */}
               <button

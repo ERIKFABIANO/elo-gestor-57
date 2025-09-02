@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, ClipboardList, TrendingUp } from "lucide-react";
+import { Users, ClipboardList, TrendingUp, Activity, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserManagement } from "./UserManagement";
 
@@ -8,6 +8,7 @@ interface AdminStats {
   totalUsers: number;
   totalTasks: number;
   completedTasks: number;
+  totalLogins: number;
   dailyAccess: number;
 }
 
@@ -16,6 +17,7 @@ export const AdminDashboard = () => {
     totalUsers: 0,
     totalTasks: 0,
     completedTasks: 0,
+    totalLogins: 0,
     dailyAccess: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -38,8 +40,18 @@ export const AdminDashboard = () => {
         .from('tasks')
         .select('*', { count: 'exact', head: true });
 
-      // Get completed tasks - for now using 0 as placeholder
-      const completedTasksCount = 0;
+      // Get completed tasks
+      const { count: completedTasksCount } = await supabase
+        .from('tasks')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'completed');
+
+      // Get total logins (sum of all access_count)
+      const { data: allLogins } = await supabase
+        .from('daily_access')
+        .select('access_count');
+      
+      const totalLogins = allLogins?.reduce((sum, record) => sum + record.access_count, 0) || 0;
 
       // Get daily access for today
       const today = new Date().toISOString().split('T')[0];
@@ -54,6 +66,7 @@ export const AdminDashboard = () => {
         totalUsers: usersCount || 0,
         totalTasks: tasksCount || 0,
         completedTasks: completedTasksCount || 0,
+        totalLogins: totalLogins,
         dailyAccess: totalDailyAccess,
       });
     } catch (error) {
@@ -77,16 +90,22 @@ export const AdminDashboard = () => {
       gradient: "bg-gradient-orange",
     },
     {
-      title: "Total de Tarefas Realizadas",
+      title: "Metas Alcançadas",
       value: stats.completedTasks,
       icon: TrendingUp,
       gradient: "bg-gradient-success",
     },
     {
-      title: "Acessos Diários",
-      value: stats.dailyAccess,
-      icon: TrendingUp,
+      title: "Total de Logins Realizados",
+      value: stats.totalLogins,
+      icon: Activity,
       gradient: "bg-gradient-purple",
+    },
+    {
+      title: "Acessos Hoje",
+      value: stats.dailyAccess,
+      icon: Clock,
+      gradient: "bg-gradient-orange",
     },
   ];
 
@@ -106,7 +125,7 @@ export const AdminDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {statsCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
